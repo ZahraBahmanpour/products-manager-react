@@ -1,5 +1,12 @@
+import { Container } from "@mui/material";
+import SearchBar from "./components/SearchBar";
+
 function App() {
-  return <div>Hello World</div>;
+  return (
+    <Container>
+      <SearchBar />
+    </Container>
+  );
 }
 
 export default App;
