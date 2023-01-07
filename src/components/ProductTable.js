@@ -22,15 +22,15 @@ const ProductTable = () => {
   }, []);
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "name", headerName: "Name", width: 200 },
-    { field: "price", headerName: "Price", type: "number", width: 100 },
+    { field: "name", headerName: "Name", width: 300 },
+    { field: "price", headerName: "Price", type: "number", width: 150 },
     {
       field: "countInStock",
       headerName: "Count",
       type: "number",
-      width: 90,
+      width: 150,
     },
-    { field: "createdAt", headerName: "Create Date", width: 150 },
+    { field: "createdAt", headerName: "Create Date", width: 200 },
     {
       field: "actions",
       headerName: "Actions",
@@ -39,12 +39,12 @@ const ProductTable = () => {
         return (
           <>
             <IconButton>
-              <PreviewIcon />
+              <PreviewIcon color="success" />
             </IconButton>
             <IconButton>
-              <EditIcon />
+              <EditIcon color="warning" />
             </IconButton>
-            <IconButton>
+            <IconButton color="error">
               <DeleteIcon />
             </IconButton>
           </>
