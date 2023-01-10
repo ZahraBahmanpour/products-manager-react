@@ -23,7 +23,14 @@ const ProductTable = ({ queryString }) => {
         console.log(e);
       }
     };
-    fetchProducts();
+    let timerId;
+    if (queryString) {
+      console.log(queryString);
+      timerId = setTimeout(fetchProducts, 1000);
+    } else {
+      fetchProducts();
+    }
+    return () => clearTimeout(timerId);
   }, [editModalId, deleteModalId, queryString]);
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
