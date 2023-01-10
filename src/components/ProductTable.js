@@ -6,9 +6,11 @@ import { IconButton } from "@mui/material";
 import PreviewIcon from "@mui/icons-material/Preview";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditModal from "./EditModal";
 
 const ProductTable = () => {
   const [products, setProducts] = useState([]);
+  const [editModalId, setEditModalId] = useState(undefined);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -19,7 +21,7 @@ const ProductTable = () => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [editModalId]);
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "name", headerName: "Name", width: 300 },
@@ -35,13 +37,13 @@ const ProductTable = () => {
       field: "actions",
       headerName: "Actions",
       width: 160,
-      renderCell: () => {
+      renderCell: (params) => {
         return (
           <>
             <IconButton>
               <PreviewIcon color="success" />
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => setEditModalId(params.id)}>
               <EditIcon color="warning" />
             </IconButton>
             <IconButton color="error">
@@ -57,7 +59,18 @@ const ProductTable = () => {
     return { ...p, createdAt: new Date(p.createdAt).toDateString() };
   });
 
-  return <Table rows={rows} columns={columns} />;
+  return (
+    <>
+      {editModalId && (
+        <EditModal
+          open={editModalId ? true : false}
+          handleClose={() => setEditModalId(undefined)}
+          product={products.find((p) => p.id === editModalId)}
+        />
+      )}
+      <Table rows={rows} columns={columns} />
+    </>
+  );
 };
 
 export default ProductTable;
