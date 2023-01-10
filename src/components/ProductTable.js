@@ -7,10 +7,13 @@ import PreviewIcon from "@mui/icons-material/Preview";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditModal from "./EditModal";
+import DeleteModal from "./DeleteModal";
 
 const ProductTable = () => {
   const [products, setProducts] = useState([]);
   const [editModalId, setEditModalId] = useState(undefined);
+  const [deleteModalId, setDeleteModalId] = useState(undefined);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -21,7 +24,7 @@ const ProductTable = () => {
       }
     };
     fetchProducts();
-  }, [editModalId]);
+  }, [editModalId, deleteModalId]);
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "name", headerName: "Name", width: 300 },
@@ -46,8 +49,8 @@ const ProductTable = () => {
             <IconButton onClick={() => setEditModalId(params.id)}>
               <EditIcon color="warning" />
             </IconButton>
-            <IconButton color="error">
-              <DeleteIcon />
+            <IconButton onClick={() => setDeleteModalId(params.id)}>
+              <DeleteIcon color="error" />
             </IconButton>
           </>
         );
@@ -66,6 +69,13 @@ const ProductTable = () => {
           open={editModalId ? true : false}
           handleClose={() => setEditModalId(undefined)}
           product={products.find((p) => p.id === editModalId)}
+        />
+      )}
+      {deleteModalId && (
+        <DeleteModal
+          open={deleteModalId ? true : false}
+          handleClose={() => setDeleteModalId(undefined)}
+          id={deleteModalId}
         />
       )}
       <Table rows={rows} columns={columns} />
