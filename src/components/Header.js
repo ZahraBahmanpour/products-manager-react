@@ -6,7 +6,7 @@ import Item from "@mui/material/Grid";
 import { useState } from "react";
 import CreateModal from "./CreateModal";
 
-const Header = () => {
+const Header = ({ queryString, handleChange }) => {
   const [showModal, setShowModal] = useState();
   return (
     <>
@@ -15,7 +15,10 @@ const Header = () => {
       )}
       <Grid item xs={8}>
         <Item>
-          <SearchBar />
+          <SearchBar
+            value={queryString}
+            handleChange={(text) => handleChange(text)}
+          />
         </Item>
       </Grid>
       <Grid item xs={4}>

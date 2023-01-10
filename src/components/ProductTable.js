@@ -9,7 +9,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditModal from "./EditModal";
 import DeleteModal from "./DeleteModal";
 
-const ProductTable = () => {
+const ProductTable = ({ queryString }) => {
   const [products, setProducts] = useState([]);
   const [editModalId, setEditModalId] = useState(undefined);
   const [deleteModalId, setDeleteModalId] = useState(undefined);
@@ -17,14 +17,14 @@ const ProductTable = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(PRODUCTS_URL);
+        const response = await axios.get(`${PRODUCTS_URL}?name=${queryString}`);
         setProducts(response.data.products);
       } catch (e) {
         console.log(e);
       }
     };
     fetchProducts();
-  }, [editModalId, deleteModalId]);
+  }, [editModalId, deleteModalId, queryString]);
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "name", headerName: "Name", width: 300 },
