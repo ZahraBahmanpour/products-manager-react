@@ -21,7 +21,7 @@ const ProductTable = ({ queryString }) => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `${PRODUCTS_URL}ssss?name=${queryString}`,
+          `${PRODUCTS_URL}?name=${queryString}`,
           { signal: abortControlller.signal }
         );
         setProducts(response.data.products);
