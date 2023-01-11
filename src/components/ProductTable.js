@@ -2,25 +2,33 @@ import axios from "../api/http";
 import { useEffect, useState } from "react";
 import Table from "./Table";
 import { PRODUCTS_URL } from "../config/api";
-import { IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import PreviewIcon from "@mui/icons-material/Preview";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditModal from "./EditModal";
 import DeleteModal from "./DeleteModal";
 
+const abortControlller = new AbortController();
 const ProductTable = ({ queryString }) => {
   const [products, setProducts] = useState([]);
   const [editModalId, setEditModalId] = useState(undefined);
   const [deleteModalId, setDeleteModalId] = useState(undefined);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${PRODUCTS_URL}?name=${queryString}`);
+        setLoading(true);
+        const response = await axios.get(
+          `${PRODUCTS_URL}ssss?name=${queryString}`,
+          { signal: abortControlller.signal }
+        );
         setProducts(response.data.products);
       } catch (e) {
         console.log(e);
+      } finally {
+        setLoading(false);
       }
     };
     let timerId;
@@ -32,6 +40,7 @@ const ProductTable = ({ queryString }) => {
     }
     return () => clearTimeout(timerId);
   }, [editModalId, deleteModalId, queryString]);
+
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "name", headerName: "Name", width: 300 },
@@ -69,6 +78,13 @@ const ProductTable = ({ queryString }) => {
     return { ...p, createdAt: new Date(p.createdAt).toDateString() };
   });
 
+  if (loading)
+    return (
+      <>
+        <div>Loading...</div>
+        <Button onClick={() => abortControlller.abort()}>Cancel</Button>
+      </>
+    );
   return (
     <>
       {editModalId && (
