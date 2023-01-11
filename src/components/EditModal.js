@@ -4,7 +4,7 @@ import axios from "../api/http";
 import { PRODUCTS_URL } from "../config/api";
 import { useState } from "react";
 
-const EditModal = ({ open, handleClose, product }) => {
+const EditModal = ({ open, handleClose, handleOk, product }) => {
   const { id, name, price, countInStock } = product;
   const [tempName, setTempName] = useState(name);
   const [tempPrice, setTempPrice] = useState(price);
@@ -17,6 +17,7 @@ const EditModal = ({ open, handleClose, product }) => {
       countInStock: tempCount,
     });
     handleClose();
+    handleOk();
   };
   return (
     <Modal

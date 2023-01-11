@@ -16,21 +16,21 @@ const ProductTable = ({ queryString }) => {
   const [deleteModalId, setDeleteModalId] = useState(undefined);
   const [loading, setLoading] = useState(false);
 
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${PRODUCTS_URL}?name=${queryString}`, {
+        signal: abortControlller.signal,
+      });
+      setProducts(response.data.products);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `${PRODUCTS_URL}?name=${queryString}`,
-          { signal: abortControlller.signal }
-        );
-        setProducts(response.data.products);
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setLoading(false);
-      }
-    };
     let timerId;
     if (queryString) {
       console.log(queryString);
@@ -39,7 +39,7 @@ const ProductTable = ({ queryString }) => {
       fetchProducts();
     }
     return () => clearTimeout(timerId);
-  }, [editModalId, deleteModalId, queryString]);
+  }, [queryString]);
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
@@ -91,6 +91,7 @@ const ProductTable = ({ queryString }) => {
         <EditModal
           open={editModalId ? true : false}
           handleClose={() => setEditModalId(undefined)}
+          handleOk={() => fetchProducts()}
           product={products.find((p) => p.id === editModalId)}
         />
       )}
@@ -98,6 +99,7 @@ const ProductTable = ({ queryString }) => {
         <DeleteModal
           open={deleteModalId ? true : false}
           handleClose={() => setDeleteModalId(undefined)}
+          handleOk={() => fetchProducts()}
           id={deleteModalId}
         />
       )}
