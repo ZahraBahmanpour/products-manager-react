@@ -3,11 +3,13 @@ import TextField from "@mui/material/TextField";
 import axios from "../api/http";
 import { PRODUCTS_URL } from "../config/api";
 import { useState } from "react";
+import FileUpload from "./FileUpload";
 
 const CreateModal = ({ open, handleClose }) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [count, setCount] = useState("");
+  const [file, setFile] = useState(undefined);
   const [errors, setErrors] = useState({ name: "", price: "", count: "" });
 
   const createNewProduct = async () => {
@@ -16,6 +18,9 @@ const CreateModal = ({ open, handleClose }) => {
       price,
       countInStock: count,
     });
+    const formData = new FormData();
+    formData.append("image", file);
+    await axios.post(`${PRODUCTS_URL}/fileUpload`, formData);
     handleClose();
   };
 
@@ -83,6 +88,7 @@ const CreateModal = ({ open, handleClose }) => {
         onChange={validateCount}
       />
       {errors.count && <span style={{ color: "red" }}>{errors.count}</span>}
+      <FileUpload handleChange={(file) => setFile(file)} />
     </Modal>
   );
 };
